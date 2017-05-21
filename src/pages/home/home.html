@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Employees</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <h3 (click)="restartAgain()">Work in Progress</h3>
+  <ion-list>
+    <ion-item-sliding *ngFor="let employee of employees; let i = index;">
+      <ion-item>
+        <div item-right>{{ employee.doc.firstName+" "+employee.doc.lastName }}</div>
+      </ion-item>
+      <ion-item-options>
+        <button ion-button icon-only color="light" (click)="updateEmp(employee.doc,i)">
+          <ion-icon name="create"></ion-icon>
+        </button>
+        <button ion-button icon-only color="primary" (click)="deleteTodo(todo)">
+          <ion-icon name="checkmark"></ion-icon>
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <button ion-button secondary menuToggle>Toggle Menu</button>
+</ion-content>
