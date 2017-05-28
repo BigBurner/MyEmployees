@@ -10,20 +10,30 @@
 <ion-content padding>
   <h3 (click)="restartAgain()">Work in Progress</h3>
   <ion-list>
-    <ion-item-sliding *ngFor="let employee of employees; let i = index;">
+    <ion-item-sliding *ngFor="let employee of employees; let i = index;" class="">
       <ion-item>
-        <div item-right>{{ employee.doc.firstName+" "+employee.doc.lastName }}</div>
+        <ion-avatar item-left>
+          <img src="{{'assets/img/' +employee.doc.picture}}"/>
+        </ion-avatar>
+
+        <div>
+          <h2>{{ employee.doc.firstName+" "+employee.doc.lastName}}</h2>
+          <span style="font-size: small; color: grey;">{{ employee.doc.title }}</span>
+        </div>
+        <div *ngIf="employee.doc.reportCount>0" item-right class="reportsCount">
+          <span> {{employee.doc.reportCount}}</span>
+        </div>
       </ion-item>
       <ion-item-options>
         <button ion-button icon-only color="light" (click)="updateEmp(employee.doc,i)">
           <ion-icon name="create"></ion-icon>
         </button>
-        <button ion-button icon-only color="primary" (click)="deleteTodo(todo)">
+        <button ion-button icon-only color="primary" (click)="showEmpDetail(employee.doc.id, i)">
           <ion-icon name="checkmark"></ion-icon>
         </button>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
 
-  <button ion-button secondary menuToggle>Toggle Menu</button>
+  <!-- <button ion-button secondary menuToggle>Toggle Menu</button> -->
 </ion-content>
