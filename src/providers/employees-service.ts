@@ -43,6 +43,11 @@ export class EmployeesService {
     })
   }
 
+  getEmployee(empId: String): Promise<any> {
+    console.log('called'+empId)
+    return this.db.get(empId);
+  }
+
   addEmployee(employee) {
     employee.type = "Employee";
     employee._id = "emp:" + employee.firstName + employee.lastName;

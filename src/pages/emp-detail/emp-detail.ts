@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { EmployeesService } from '../../providers/employees-service';
 
 
 
@@ -16,10 +17,18 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class EmpDetail {
 	employee: any;
+	mgrEmployee: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public employeesService: EmployeesService) {
   	this.employee = navParams.get("currEmp");
+  	
   	console.log(this.employee);
+  	if (this.employee.doc.managerId != 0) {
+	    this.employeesService.getEmployee(this.employee.doc.managerId)
+	    .then(emp => {
+	    	this.mgrEmployee = emp;
+	    });	
+  	}
   }
 
   ionViewDidLoad() {

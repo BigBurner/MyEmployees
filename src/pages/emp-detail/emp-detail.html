@@ -18,5 +18,35 @@
 	  <p style="color: grey;">{{ employee.doc.title }}</p>
 	  <p style="font-size: small; color: grey;">{{ employee.doc.city }}</p>
 	</div>
+	<ion-list>
+	  <ion-item *ngIf="mgrEmployee">
+	  	<p>View Manager</p>
+	  	<h2>{{ mgrEmployee?.firstName+" "+mgrEmployee?.lastName}}</h2>
+	  </ion-item>
+	  <ion-item *ngIf="employee.doc.reportCount > 0">
+	  	<h2>View Direct reports</h2>
+	  	<!-- <h2>{{ mgrEmployee?.firstName+" "+mgrEmployee?.lastName}}</h2> -->
+	  </ion-item>
+	  <ion-item>
+	  	<a href="mailto:{{employee.doc.email}}">{{employee.doc.email}}</a>
+	  	<ion-icon name="mail" item-left></ion-icon>
+	  	<!-- <h2>{{ mgrEmployee?.firstName+" "+mgrEmployee?.lastName}}</h2> -->
+	  </ion-item>
+	  <ion-item>
+	  	<a href="tel:{{employee.doc.officePhone}}">{{employee.doc.officePhone}}</a>
+	  	<ion-icon name="call" item-left></ion-icon>
+	  	<!-- <h2>{{ mgrEmployee?.firstName+" "+mgrEmployee?.lastName}}</h2> -->
+	  </ion-item>
+	  <ion-item>
+	  	<a href="tel:{{employee.doc.cellPhone}}">{{employee.doc.cellPhone}}</a>
+	  	<ion-icon name="phone-portrait" item-left></ion-icon>
+	  	<!-- <h2>{{ mgrEmployee?.firstName+" "+mgrEmployee?.lastName}}</h2> -->
+	  </ion-item>
+	  <ion-item>
+	  	<a href="sms:{{employee.doc.cellPhone}}">{{employee.doc.cellPhone}}</a>
+	  	<ion-icon name="text" item-left></ion-icon>
+	  	<!-- <h2>{{ mgrEmployee?.firstName+" "+mgrEmployee?.lastName}}</h2> -->
+	  </ion-item>
+	</ion-list>
 
 </ion-content>
