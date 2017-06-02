@@ -63,9 +63,6 @@ export class EmployeesService {
 
   updateEmployee(employee): Promise<any> {
     return this.db.put(employee);
-    // .then(resp =>{
-    //   return resp;
-    // });
   }
 
   addPhotoToEmployee(employee) {

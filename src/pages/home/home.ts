@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, AlertController } from 'ionic-angular';
 import { EmployeesService } from '../../providers/employees-service';
 import { EmpDetail } from '../emp-detail/emp-detail';
+import { EmpEdit } from '../emp-edit/emp-edit';
 
 @Component({   selector: 'page-home',   templateUrl: 'home.html' }) export class HomePage {   employees;
 
@@ -65,10 +66,27 @@ import { EmpDetail } from '../emp-detail/emp-detail';
     if (emp){
       this.navCtrl.push(EmpDetail, {
         "currEmp": emp 
-    });
-  } else {
+      });
+    } 
+    else {
       console.log("emp not forund");
+    }    
   }
+
+  showEmpEdit(empId: String, empIndex: any){
+    let emp; 
+    console.log("idx"+empIndex);
+    if (empIndex >= 0){
+      emp = this.employees[empIndex];
+    }
+    if (emp){
+      this.navCtrl.push(EmpEdit, {
+        "currEmp": emp 
+      });
+    } 
+    else {
+      console.log("emp not forund");
+    }      
   }
   updateEmp(employee, indx) {
     let prompt = this.alertCtrl.create({
