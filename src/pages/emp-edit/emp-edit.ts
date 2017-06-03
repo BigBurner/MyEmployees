@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, Events } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { EmployeesService } from '../../providers/employees-service';
-
 
 /**
  * Generated class for the EmpEdit page.
@@ -20,13 +19,14 @@ export class EmpEdit {
   private employee: FormGroup;
   private empParam;
   public formChanged: boolean = false;
+  private addMode: boolean = true;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder
-  	, public employeesService: EmployeesService, private toastCtrl: ToastController) {
+  	, public employeesService: EmployeesService, private toastCtrl: ToastController, public events: Events) {
   	this.empParam = navParams.get("currEmp");
-  	let emp = { "_id": "", "_rev": ""
-  			  , "firstName": ""
-  			  , "lastName": "", "title": "", "department": ""
+  	let emp = { "_id": ""
+  			  , "firstName": "", "lastName": ""
+  			  , "title": "", "department": ""
   			  , "managerId": "", "city": "", "officePhone": ""
   			  , "cellPhone": "", "email": "", "picture": "" 
   			  };
@@ -34,6 +34,9 @@ export class EmpEdit {
   	if (this.empParam){
 	  	emp = this.empParam.doc;
 	  	console.log(emp);
+  	}
+  	else {
+  		this.addMode = true;
   	}
   	this.employee = this.formBuilder.group({
   		id: [emp._id],
@@ -49,7 +52,7 @@ export class EmpEdit {
   	})
 
   	this.employee.valueChanges.subscribe(data => {
-      console.log('Form changes', data)
+      // console.log('Form changes', data)
       this.formChanged = true;
     })
   }
@@ -60,30 +63,39 @@ export class EmpEdit {
 
   saveEmployee(){
   	console.log(this.employee.value);
-	this.empParam.doc.firstName = this.employee.value.firstName
-	this.empParam.doc.lastName = this.employee.value.lastName
-	this.empParam.doc.title = this.employee.value.title
-	this.empParam.doc.department = this.employee.value.department
-	this.empParam.doc.managerId = this.employee.value.managerId
-	this.empParam.doc.city = this.employee.value.city
-	this.empParam.doc.officePhone = this.employee.value.officePhone
-	this.empParam.doc.cellPhone = this.employee.value.cellPhone
-	this.empParam.doc.email = this.employee.value.email
-	// this.empParam._id = this.empParam.id
-	console.log(this.empParam);
-  	this.employeesService.updateEmployee(this.empParam.doc)
-  	.then(uemp => {
-	  console.log(this.empParam.doc._rev + ">" + uemp.rev);
-	  this.empParam.doc._rev = uemp.rev;
-	  this.presentToast();
-	});
+	console.log(this.addMode)
+	if (this.addMode) {
+		this.employeesService.addEmployee(this.employee.value)
+		.then(aemp => {
+      this.events.publish('user:created', aemp);
+			this.presentToast();
+		})
+	}
+	else {
+		this.empParam.doc.firstName = this.employee.value.firstName
+		this.empParam.doc.lastName = this.employee.value.lastName
+		this.empParam.doc.title = this.employee.value.title
+		this.empParam.doc.department = this.employee.value.department
+		this.empParam.doc.managerId = this.employee.value.managerId
+		this.empParam.doc.city = this.employee.value.city
+		this.empParam.doc.officePhone = this.employee.value.officePhone
+		this.empParam.doc.cellPhone = this.employee.value.cellPhone
+		this.empParam.doc.email = this.employee.value.email
+		// console.log(this.empParam);
+	  	this.employeesService.updateEmployee(this.empParam.doc)
+	  	.then(uemp => {
+		  console.log(this.empParam.doc._rev + ">" + uemp.rev);
+		  this.empParam.doc._rev = uemp.rev;
+		  this.presentToast();
+		});		
+	}
   }
 
   presentToast() {
     let toast = this.toastCtrl.create({
       message: 'User was saved successfully',
       duration: 3000,
-      position: 'middle'
+      position: 'top'
     });
   
     toast.onDidDismiss(() => {
@@ -96,4 +108,8 @@ export class EmpEdit {
   submitForm(formx){
   	console.log(formx)
   }
+
+  // ionViewWillLeave(){
+  //   this.events.publish('user:created', "blah blah");
+  // }
 }

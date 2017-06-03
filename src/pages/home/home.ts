@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController } from 'ionic-angular';
+import { NavController, AlertController, Events } from 'ionic-angular';
 import { EmployeesService } from '../../providers/employees-service';
 import { EmpDetail } from '../emp-detail/emp-detail';
 import { EmpEdit } from '../emp-edit/emp-edit';
 
 @Component({   selector: 'page-home',   templateUrl: 'home.html' }) export class HomePage {   employees;
 
-  constructor(public navCtrl: NavController, public employeesService: EmployeesService, public alertCtrl: AlertController) { }
+  constructor(public navCtrl: NavController, public employeesService: EmployeesService
+             , public alertCtrl: AlertController, public events: Events) { }
 
   ionViewDidLoad() {
     let emp = { "id": 1, "firstName": "James", "lastName": "King", "title": "President and CEO", "department": "Corporate", "managerId": "0", "city": "Boston, MA", "officePhone": "617-000-0001", "cellPhone": "781-000-0001", "email": "jking@fakemail.com", "picture": "james_king.jpg" };
@@ -38,26 +39,18 @@ import { EmpEdit } from '../emp-edit/emp-edit';
     // this.employeesService.addEmployee(emp);
     // emp = { firstName: "Aditi", lastName: "Jukar" };
     // this.employeesService.addEmployee(emp);
+    this.setupEmployees()
 
-    this.employeesService.getEmployees()
-      .then(resp => {
-        this.employees = resp;
-        this.employees.map((emp) =>{
-          this.employeesService.getReportsCount(emp.id).then ((result) =>{
-            console.log(result.docs.length);
-            emp.doc.reportCount =result.docs.length;  
-          });
-          
-        })
-        // for (var i = 0; i < this.employees.length; i++) {
-        //   console.log("idx"+i);
-        //   console.log(this.employees[i].doc);
-        // }
-      });
+
+    this.events.subscribe('user:created', (userEventData) => {
+      // userEventData is an array of parameters, so grab our first and only arg
+      console.log('Welcome', userEventData);
+      // this.employees.push(userEventData)
+      this.setupEmployees()
+    });
   }
 
   showEmpDetail(empId: String, empIndex: any){
-
     let emp; 
     console.log("idx"+empIndex);
     if (empIndex >= 0){
@@ -65,7 +58,8 @@ import { EmpEdit } from '../emp-edit/emp-edit';
     }
     if (emp){
       this.navCtrl.push(EmpDetail, {
-        "currEmp": emp 
+        currEmp: emp ,
+        callback: this.callbackOnReturn
       });
     } 
     else {
@@ -125,6 +119,32 @@ import { EmpEdit } from '../emp-edit/emp-edit';
     this.employeesService.addIndex();
     // this.employees[0].doc.firstName = 'test'
     // this.employeesService.compactDB();
+  }
+
+  callbackOnReturn(parm){
+    //not used but a way to pass param to calling page
+    return new Promise((resolve,reject) => {
+      console.log(parm)
+      return resolve("ok")
+    })
+  }
+
+  setupEmployees(){
+    this.employeesService.getEmployees()
+      .then(resp => {
+        this.employees = resp;
+        this.employees.map((emp) =>{
+          this.employeesService.getReportsCount(emp.id).then ((result) =>{
+            console.log(result.docs.length);
+            emp.doc.reportCount =result.docs.length;  
+          });
+          
+        })
+        // for (var i = 0; i < this.employees.length; i++) {
+        //   console.log("idx"+i);
+        //   console.log(this.employees[i].doc);
+        // }
+      });    
   }
 
 }

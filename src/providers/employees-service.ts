@@ -48,17 +48,29 @@ export class EmployeesService {
     return this.db.get(empId);
   }
 
-  addEmployee(employee) {
-    employee.type = "Employee";
-    employee._id = "emp:" + employee.firstName + employee.lastName;
+  addEmployee(employee): Promise<any> {
+    return new Promise((resolve, reject) => {
+      employee.type = "Employee";
+      employee._id = "emp:" + employee.firstName + employee.lastName;
 
-    this.db.get(employee._id)
-      .then(emp => {
-      })
-      .catch(resp => {
-        this.db.put(employee);
-        console.log("creating emp")
-      });
+      this.db.get(employee._id)
+        .then(emp => {
+          console.log("got emp, so not creating, try update")
+          return resolve(emp);
+        })
+        .catch(resp => {
+          console.log("creating emp")
+          if(!employee.picture){
+            employee.picture = "placeholder.jpg"
+          }
+          this.db.put(employee)
+          .then(emp => {
+            console.log("returning new emp")
+            return resolve(emp)
+          });
+        });
+      // return reject("did not do anything");
+    });
   }
 
   updateEmployee(employee): Promise<any> {
@@ -80,8 +92,8 @@ export class EmployeesService {
         managerId: empId
       }
     });
-
   }
+
   addIndex(){
     this.db.createIndex({
       index: {
@@ -100,7 +112,6 @@ export class EmployeesService {
     }).then((res) => {
       console.log(res.docs.length);
     });
-
 
     var ddoc = {
       _id: '_design/mgrIndex',

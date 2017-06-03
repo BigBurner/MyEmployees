@@ -9,17 +9,17 @@
   <ion-navbar>
     <ion-title>Create or Edit</ion-title>
     <ion-buttons end>
-      <button ion-button [disabled]="!myForm.form.valid || !formChanged" (click)="myForm.ngSubmit.emit()"> 
+      <button  form="myFormId" ion-button [disabled]="!myForm.form.valid || !formChanged"> 
       	Save
       </button>
     </ion-buttons>
   </ion-navbar>
-
+ <!-- (click)="myForm.ngSubmit.emit()" -->
 </ion-header>
 
 
 <ion-content padding>
-	<form [formGroup]="employee" (ngSubmit)="saveEmployee()" #myForm="ngForm">
+	<form [formGroup]="employee" id="myFormId" (ngSubmit)="saveEmployee()" #myForm="ngForm">
       <ion-item>
         <ion-label color="primary" stacked>First Name</ion-label>
         <ion-input formControlName="firstName"></ion-input>
@@ -56,6 +56,6 @@
         <ion-label color="primary" stacked>Manager</ion-label>
         <ion-input type="text" formControlName="managerId"></ion-input>
       </ion-item>
-      <button id="btn1" ion-button type="submit" [disabled]="!employee.valid">Submit</button>
+      <!-- <button id="btn1" ion-button type="submit" [disabled]="!employee.valid">Submit</button> -->
     </form>
 </ion-content>
