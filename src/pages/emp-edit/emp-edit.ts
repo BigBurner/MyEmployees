@@ -19,36 +19,47 @@ export class EmpEdit {
   private employee: FormGroup;
   private empParam;
   public formChanged: boolean = false;
-  private addMode: boolean = true;
+  private addMode: boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder
   	, public employeesService: EmployeesService, private toastCtrl: ToastController, public events: Events) {
   	this.empParam = navParams.get("currEmp");
+    let copyMode: boolean = navParams.get("copyMode")
   	let emp = { "_id": ""
-  			  , "firstName": "", "lastName": ""
-  			  , "title": "", "department": ""
-  			  , "managerId": "", "city": "", "officePhone": ""
-  			  , "cellPhone": "", "email": "", "picture": "" 
-  			  };
+      			  , "firstName": "", "lastName": ""
+      			  , "title": "", "department": ""
+      			  , "managerId": "", "city": "", "officePhone": ""
+      			  , "cellPhone": "", "email": "", "picture": "" 
+      			  };
 
   	if (this.empParam){
-	  	emp = this.empParam.doc;
+      if (copyMode) {
+        emp = JSON.parse(JSON.stringify(this.empParam.doc)) // this detaches the object from ref
+        emp.firstName = ""
+        emp.lastName = ""
+        emp.email = ""
+        this.addMode = true
+      }
+      else {
+        emp = this.empParam.doc;        
+      }
 	  	console.log(emp);
   	}
   	else {
   		this.addMode = true;
   	}
+
   	this.employee = this.formBuilder.group({
   		id: [emp._id],
-		title: [emp.title, Validators.required],
-		firstName: [emp.firstName, Validators.required],
-		lastName: [emp.lastName, Validators.required],
-		department: [emp.department],
-		managerId: [emp.managerId],
-		city: [emp.city],
-		officePhone: [emp.officePhone],
-		cellPhone: [emp.cellPhone],
-		email: [emp.email]
+  		title: [emp.title, Validators.required],
+  		firstName: [emp.firstName, Validators.required],
+  		lastName: [emp.lastName, Validators.required],
+  		department: [emp.department],
+  		managerId: [emp.managerId],
+  		city: [emp.city],
+  		officePhone: [emp.officePhone],
+  		cellPhone: [emp.cellPhone],
+  		email: [emp.email]
   	})
 
   	this.employee.valueChanges.subscribe(data => {
@@ -94,8 +105,8 @@ export class EmpEdit {
   presentToast() {
     let toast = this.toastCtrl.create({
       message: 'User was saved successfully',
-      duration: 3000,
-      position: 'top'
+      duration: 2000,
+      position: 'middle'
     });
   
     toast.onDidDismiss(() => {

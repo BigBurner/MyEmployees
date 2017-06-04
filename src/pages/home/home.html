@@ -9,6 +9,7 @@
 
 <ion-content padding>
   <h3 (click)="restartAgain()">Work in Progress</h3>
+  <!-- <auto-complete></auto-complete> -->
   <ion-list>
     <ion-item-sliding *ngFor="let employee of employees; let i = index;" class="">
       <ion-item (click)="showEmpDetail(employee.doc.id, i)">
@@ -25,11 +26,11 @@
         </div>
       </ion-item>
       <ion-item-options>
-        <button ion-button icon-only color="light" (click)="updateEmp(employee.doc,i)">
+        <button ion-button icon-only color="light" (click)="showEmpEdit(employee.doc.id, i, false)">
           <ion-icon name="create"></ion-icon>
         </button>
-        <button ion-button icon-only color="primary" (click)="showEmpEdit(employee.doc.id, i)">
-          <ion-icon name="checkmark"></ion-icon>
+        <button ion-button icon-only color="primary" (click)="showEmpEdit(employee.doc.id, i, true)">
+          <ion-icon name="copy"></ion-icon>
         </button>
       </ion-item-options>
     </ion-item-sliding>

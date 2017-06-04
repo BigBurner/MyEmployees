@@ -35,17 +35,12 @@ import { EmpEdit } from '../emp-edit/emp-edit';
     emp = { "id": 12, "firstName": "Steven", "lastName": "Wells", "title": "Software Architect", "department": "Engineering", "managerId": "emp:JohnWilliams", "city": "Boston, MA", "officePhone": "617-000-0012", "cellPhone": "781-000-0012", "email": "swells@fakemail.com", "picture": "steven_wells.jpg" };
     this.employeesService.addEmployee(emp);
 
-    // emp = { "id": 222, firstName: "Rushi", lastName: "Jukar" };
-    // this.employeesService.addEmployee(emp);
-    // emp = { firstName: "Aditi", lastName: "Jukar" };
-    // this.employeesService.addEmployee(emp);
+    this.employeesService.addIndex();
+
     this.setupEmployees()
 
-
     this.events.subscribe('user:created', (userEventData) => {
-      // userEventData is an array of parameters, so grab our first and only arg
       console.log('Welcome', userEventData);
-      // this.employees.push(userEventData)
       this.setupEmployees()
     });
   }
@@ -67,7 +62,7 @@ import { EmpEdit } from '../emp-edit/emp-edit';
     }    
   }
 
-  showEmpEdit(empId: String, empIndex: any){
+  showEmpEdit(empId: String, empIndex: any, copyMode: boolean){
     let emp; 
     console.log("idx"+empIndex);
     if (empIndex >= 0){
@@ -75,7 +70,8 @@ import { EmpEdit } from '../emp-edit/emp-edit';
     }
     if (emp){
       this.navCtrl.push(EmpEdit, {
-        "currEmp": emp 
+        currEmp: emp,
+        copyMode: copyMode
       });
     } 
     else {
@@ -112,9 +108,6 @@ import { EmpEdit } from '../emp-edit/emp-edit';
     prompt.present();
   }
 
-  getReportCount(idx){
-    this.employees.doc.reportCount =3;
-  }
   restartAgain() {
     this.employeesService.addIndex();
     // this.employees[0].doc.firstName = 'test'

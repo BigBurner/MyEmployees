@@ -3,6 +3,7 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
+import { AutoComplete } from '../components/auto-complete/auto-complete'
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { EmpDetail } from '../pages/emp-detail/emp-detail';
@@ -18,7 +19,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     HomePage,
     ListPage,
     EmpDetail,
-    EmpEdit
+    EmpEdit,
+    AutoComplete
   ],
   imports: [
     BrowserModule,
