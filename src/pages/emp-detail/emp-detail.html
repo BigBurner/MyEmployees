@@ -12,7 +12,7 @@
 
 
 <ion-content padding>
-	<img style="width: 100px; height: 100px;" src="assets/img/{{employee.doc.picture}}"/>
+	<img style="width: 100px; height: 100px;" src="assets/img/{{employee.doc.picture}}" (click)="getPicFromCamera()"/>
 	<div>
 	  <h2>{{ employee.doc.firstName+" "+employee.doc.lastName}}</h2>
 	  <p style="color: grey;">{{ employee.doc.title }}</p>
@@ -46,6 +46,9 @@
 	  	<a href="sms:{{employee.doc.cellPhone}}">{{employee.doc.cellPhone}}</a>
 	  	<ion-icon name="text" item-left></ion-icon>
 	  	<!-- <h2>{{ mgrEmployee?.firstName+" "+mgrEmployee?.lastName}}</h2> -->
+	  </ion-item>
+	  <ion-item>
+	  	<img style="width: 100px; height: 100px;" src="{{newpicture}}"/>
 	  </ion-item>
 	</ion-list>
 
